@@ -15,4 +15,4 @@ COPY docker-entry.sh .
 COPY package*.json /app/
 
 # start app
-CMD ["npm", "start"]
+CMD ["blitz", "dev"]
