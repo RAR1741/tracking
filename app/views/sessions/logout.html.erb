@@ -1,9 +1,0 @@
-<h1> Log out </h1>
-
-<%= form_tag do %>
-  <% users = User.where(id: Session.all.select(:user_id)) %>
-  <% filtered_users = options_from_collection_for_select(users, :id, :name) %>
-  <%= select_tag(:id, filtered_users) %>
-
-  <%= submit_tag("Log out") %>
-<% end %>

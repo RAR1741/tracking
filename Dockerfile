@@ -1,20 +1,18 @@
-FROM ruby:2.6.3
+# base image
+FROM node:latest
 
-EXPOSE 3000
+# set working directory
 WORKDIR /app
 
-RUN \
-  apt-get update -qq && \
-  apt-get install -y --no-install-recommends \
-  nodejs \
-  postgresql-client
+EXPOSE 3000
 
-ENV BUNDLE_PATH=/bundle \
-  BUNDLE_BIN=/bundle/bin \
-  GEM_HOME=/bundle
-ENV PATH="${BUNDLE_BIN}:${PATH}"
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
 
 COPY docker-entry.sh .
 
-ENTRYPOINT ["/app/docker-entry.sh"]
-CMD ["rails", "server", "-b", "0.0.0.0"]
+# install and cache app dependencies
+COPY package*.json /app/
+
+# start app
+CMD ["npm", "start"]
