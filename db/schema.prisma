@@ -20,6 +20,10 @@ model User {
   email          String   @unique
   hashedPassword String?
   role           String   @default("USER")
+  program        String   @default("FRC")
+  graduationYear Int?
+  isStudent      Boolean  @default(false)
+  isMentor       Boolean  @default(false)
 
   tokens   Token[]
   sessions Session[]
