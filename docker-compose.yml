@@ -8,13 +8,16 @@ volumes:
 
 services:
   postgres:
-    image: postgres:11
+    image: postgres:16
     volumes:
       - postgres_data:/var/lib/postgresql/data
     logging:
       driver: "none"
     ports:
       - "${POSTGRES_PORT}:5432"
+    hostname: postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
 
   web-tracking:
     build:
@@ -30,5 +33,5 @@ services:
     ports:
       - "${RAILS_PORT}:3000"
     volumes:
-      - ./:/app:delegated
+      - ./:/app
       - bundle_cache:/bundle
