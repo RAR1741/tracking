@@ -9,7 +9,7 @@ WORKDIR /app
 
 # Set production environment
 ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
+    # BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
 
@@ -42,9 +42,54 @@ COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-# RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rake assets:precompile
-# RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
+# Latest chromedriver to control browser tests
+ARG DEBIAN_FRONTEND=noninteractive
+SHELL ["/bin/bash", "-c"]
+RUN SYSTEM_ARCH=$(arch | sed s/aarch64/arm64/) && \
+    if [ "$SYSTEM_ARCH" = "amd64" ]; then \
+      mkdir -p /etc/apt/keyrings && \
+      curl -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | tee /etc/apt/keyrings/chrome.asc && \
+      echo "deb [signed-by=/etc/apt/keyrings/chrome.asc arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | tee /etc/apt/sources.list.d/google.list && \
+      apt-get update && \
+      apt-get install -y --no-install-recommends \
+        google-chrome-stable && \
+      rm -rf /var/lib/apt/lists/* && \
+      CHROMEDRIVER_VERSION=$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE) && \
+      mkdir -p /opt/chromedriver-$CHROMEDRIVER_VERSION && \
+      curl -sS -o /tmp/chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip && \
+      unzip -qq /tmp/chromedriver_linux64.zip -d /opt/chromedriver-$CHROMEDRIVER_VERSION && \
+      rm /tmp/chromedriver_linux64.zip && \
+      chmod +x /opt/chromedriver-$CHROMEDRIVER_VERSION/chromedriver && \
+      ln -fs /opt/chromedriver-$CHROMEDRIVER_VERSION/chromedriver /usr/local/bin/chromedriver ; \
+    else \
+      apt-get update && \
+      echo "============================ 1 =============================" && \
+      apt-get install -y --no-install-recommends debian-archive-keyring && \
+      echo "============================ 2 =============================" && \
+      echo $'Explanation: Allow installing chromium from the debian repo. \n\
+Package: chromium* \n\
+Pin: origin "*.debian.org" \n\
+Pin-Priority: 100 \n\
+\n\
+Explanation: Avoid other packages from the debian repo. \n\
+Package: * \n\
+Pin: origin "*.debian.org" \n\
+Pin-Priority: 1 \n\
+' > /etc/apt/preferences.d/debian-chromium && \
+      cat /etc/apt/preferences.d/debian-chromium && \
+      echo "============================ 3 =============================" && \
+      apt-get update && \
+      echo "============================ 4 =============================" && \
+      apt-get install -y --no-install-recommends chromium chromium-driver && \
+      echo "============================ 5 =============================" && \
+      ln -s $(which chromium) /usr/bin/google-chrome && \
+      echo "============================ 6 =============================" && \
+      rm -rf /var/lib/apt/lists/* && \
+      echo "============================ 7 =============================" && \
+      echo "Chromium installed for $SYSTEM_ARCH" ; \
+    fi
 
 # Final stage for app image
 FROM base
@@ -67,4 +112,4 @@ COPY --from=build /app /app
 ENTRYPOINT ["/app/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
-CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
+CMD ["bin/start_server"]

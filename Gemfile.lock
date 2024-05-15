@@ -103,6 +103,7 @@ GEM
     diff-lcs (1.5.1)
     drb (2.2.1)
     erubi (1.12.0)
+    foreman (0.88.1)
     fuubar (2.5.1)
       rspec-core (~> 3.0)
       ruby-progressbar (~> 1.4)
@@ -316,6 +317,7 @@ DEPENDENCIES
   bootsnap
   capybara
   debug
+  foreman
   fuubar
   importmap-rails
   jbuilder
