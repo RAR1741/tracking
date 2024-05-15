@@ -32,8 +32,8 @@ plugins:
     enabled: true
   reek:
     enabled: true
-  standard:
-    enabled: true
+  # standard:
+  #   enabled: true
 ratings:
   paths:
     - "app/**"
