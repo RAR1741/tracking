@@ -28,12 +28,8 @@ plugins:
     channel: rubocop-1-56-3
   markdownlint:
     enabled: true
-  rubymotion:
+  standard:
     enabled: true
-  reek:
-    enabled: true
-  # standard:
-  #   enabled: true
 ratings:
   paths:
     - "app/**"
