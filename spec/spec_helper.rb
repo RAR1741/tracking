@@ -95,27 +95,27 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 end
 
-Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
-end
+# Capybara.register_driver :chrome do |app|
+#   Capybara::Selenium::Driver.new(app, browser: :chrome)
+# end
 
-Capybara.register_driver :chrome_headless_container_friendly do |app|
-  browser_options = ::Selenium::WebDriver::Chrome::Options.new
-  browser_options.args << "--headless"
-  browser_options.args << "--disable-gpu"
-  # Sandbox cannot be used inside unprivileged containers
-  browser_options.args << "--no-sandbox"
-  # Forces docker to allocate enough memory to chromedriver for page rendering
-  # https://developers.google.com/web/tools/puppeteer/troubleshooting#tips
-  browser_options.args << "--disable-dev-shm-usage"
-  browser_options.args << "--enable-features=ConversionMeasurement,AttributionReportingCrossAppWeb"
-  # browser_options.args << "--remote-debugging-pipe"
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
-end
+# Capybara.register_driver :chrome_headless_container_friendly do |app|
+#   browser_options = ::Selenium::WebDriver::Chrome::Options.new
+#   browser_options.args << "--headless"
+#   browser_options.args << "--disable-gpu"
+#   # Sandbox cannot be used inside unprivileged containers
+#   browser_options.args << "--no-sandbox"
+#   # Forces docker to allocate enough memory to chromedriver for page rendering
+#   # https://developers.google.com/web/tools/puppeteer/troubleshooting#tips
+#   browser_options.args << "--disable-dev-shm-usage"
+#   browser_options.args << "--enable-features=ConversionMeasurement,AttributionReportingCrossAppWeb"
+#   # browser_options.args << "--remote-debugging-pipe"
+#   Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+# end
 
-# Capybara 3 and later defaults to using puma.
-Capybara.server = :puma
+# # Capybara 3 and later defaults to using puma.
+# Capybara.server = :puma
 
-Capybara.javascript_driver = ENV["INCONTAINER"] ? :chrome_headless_container_friendly : :chrome
+# Capybara.javascript_driver = ENV["INCONTAINER"] ? :chrome_headless_container_friendly : :chrome
 
-Capybara.default_max_wait_time = 15
+# Capybara.default_max_wait_time = 15
