@@ -39,6 +39,8 @@ jobs:
           bundler-cache: true
 
       - name: Setup Code Climate test-reporter
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
@@ -49,13 +51,16 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           # REDIS_URL: redis://localhost:6379/0
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         run: bin/rails spec
         # run: bin/rails db:test:prepare spec
 
       - name: Publish code coverage
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         run: |
           export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
-          ./cc-test-reporter after-build -r ${{secrets.CC_TEST_REPORTER_ID}} --coverage-input-type simplecov
+          ./cc-test-reporter after-build --coverage-input-type simplecov
 
       # - name: Keep screenshots from failed system tests
       #   uses: actions/upload-artifact@v4
