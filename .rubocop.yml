@@ -1,7 +1,4 @@
 AllCops:
-  Exclude:
-    - "bin/*"
-    -
   UseCache: false
   TargetRubyVersion: 3.3
   NewCops: enable
