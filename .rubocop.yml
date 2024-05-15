@@ -1,0 +1,19 @@
+require:
+  - rubocop-capybara
+  - rubocop-rails
+
+AllCops:
+  UseCache: false
+  TargetRubyVersion: 3.3
+  NewCops: enable
+Metrics/BlockLength:
+  Exclude:
+    - "config/environments/*.rb"
+Style/Documentation:
+  Description: Document classes and non-namespace modules.
+  Enabled: false
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+Style/FrozenStringLiteralComment:
+  Enabled: false

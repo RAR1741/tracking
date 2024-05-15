@@ -2,7 +2,7 @@
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=3.3.1
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-bookworm as base
 
 # Rails app lives here
 WORKDIR /app
@@ -20,9 +20,14 @@ FROM base as build
 USER postgres
 USER root
 
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    libpq-dev \
+    libvips \
+    pkg-config
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
