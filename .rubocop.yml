@@ -1,6 +1,7 @@
 require:
   - rubocop-capybara
   - rubocop-rails
+  - rubocop-rspec
 
 AllCops:
   UseCache: false

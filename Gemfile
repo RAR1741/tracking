@@ -55,6 +55,7 @@ group :development, :test do
   gem "rubocop", "1.56.3"
   gem "rubocop-capybara"
   gem "rubocop-rails"
+  gem "rubocop-rspec"
 
   gem "rspec-rails", "~> 6.1.0"
 

@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe ApplicationRecord, type: :model do
+RSpec.describe ApplicationRecord do
   it "is a subclass of ActiveRecord::Base" do
-    expect(ApplicationRecord < ActiveRecord::Base).to be true
+    expect(described_class < ActiveRecord::Base).to be true
   end
 end
