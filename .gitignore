@@ -36,6 +36,8 @@
 
 # Other random stuff
 spec/examples.txt
+coverage/*
+!coverage/.keep
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
