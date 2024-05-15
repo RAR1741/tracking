@@ -28,8 +28,6 @@ plugins:
     channel: rubocop-1-56-3
   markdownlint:
     enabled: true
-  standard:
-    enabled: true
 ratings:
   paths:
     - "app/**"
