@@ -50,10 +50,16 @@ gem "bootsnap", require: false
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows]
-  gem "rubocop", "1.56.3"
-  gem "rubocop-rails"
+  gem "foreman"
 
+  gem "rubocop", "1.56.3"
   gem "rubocop-capybara"
+  gem "rubocop-rails"
+  gem "rubocop-rspec"
+
+  gem "rspec-rails", "~> 6.1.0"
+
+  gem "fuubar"
 end
 
 group :development do
