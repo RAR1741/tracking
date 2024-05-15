@@ -52,6 +52,8 @@ group :development, :test do
   gem "debug", platforms: %i[mri windows]
   gem "rubocop"
   gem "rubocop-rails"
+
+  gem "rubocop-capybara"
 end
 
 group :development do
