@@ -7,9 +7,16 @@ AllCops:
   UseCache: false
   TargetRubyVersion: 3.3
   NewCops: enable
+  Exclude:
+    - "vendor/**/*"
+    - "db/**/*"
+    - "config/**/*"
+    - "bin/*"
+    - "**/*.erb"
 Metrics/BlockLength:
   Exclude:
     - "config/environments/*.rb"
+    - "spec/**/*"
 Style/Documentation:
   Description: Document classes and non-namespace modules.
   Enabled: false
@@ -18,3 +25,7 @@ Style/StringLiterals:
   EnforcedStyle: double_quotes
 Style/FrozenStringLiteralComment:
   Enabled: false
+RSpec/MultipleExpectations:
+  Max: 5
+RSpec/ExampleLength:
+  Max: 50
