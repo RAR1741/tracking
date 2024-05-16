@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   run-rspec-tests:
@@ -52,8 +52,7 @@ jobs:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           # REDIS_URL: redis://localhost:6379/0
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
-        run: bin/rails spec
-        # run: bin/rails db:test:prepare spec
+        run: bin/rails db:test:prepare spec
 
       - name: Publish code coverage
         env:
