@@ -14,7 +14,9 @@
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+ENV["RAILS_ENV"] = "test"
 require "capybara/rspec"
+require "devise"
 require "simplecov"
 SimpleCov.start
 
