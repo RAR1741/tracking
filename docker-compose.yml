@@ -1,37 +1,40 @@
-version: "3"
+name: tracking
 
 volumes:
   postgres_data:
-    driver: local
-  bundle_cache:
-    driver: local
+
 
 services:
+  ###########################
+  # SHARED POSTGRES CLUSTER #
+  ###########################
   postgres:
-    image: postgres:16
+    image: postgres:17
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "5432:5432"
     hostname: postgres
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
 
-  web-tracking:
+  tracking:
     build:
       context: .
-    tty: true
-    stdin_open: true
-    env_file:
-      - ./.env
+      dockerfile: Dockerfile
+    container_name: "tracking"
+    ports:
+      - "3000:3000"
     depends_on:
       - postgres
-    links:
-      - postgres
-    ports:
-      - "${RAILS_PORT}:3000"
     volumes:
-      - ./:/app
-      - bundle_cache:/bundle
+      - .:/app
+      - /app/node_modules
+    environment:
+      DATABASE_URL: postgres://postgres@postgres:5432/postgres
+      PORT: 3000
+    # logging:
+    #   driver: "none"
+    hostname: tracking
