@@ -2,8 +2,6 @@
 
 A modern, production-ready template for building full-stack React applications using React Router.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
-
 ## Features
 
 - 🚀 Server-side rendering
@@ -12,6 +10,7 @@ A modern, production-ready template for building full-stack React applications u
 - 🔄 Data loading and mutations
 - 🔒 TypeScript by default
 - 🎉 TailwindCSS for styling
+- 💾 PostgreSQL + DrizzleORM
 - 📖 [React Router docs](https://reactrouter.com/)
 
 ## Getting Started
@@ -25,6 +24,14 @@ npm install
 ```
 
 ### Development
+
+Copy `.env.example` to `.env` and provide a `DATABASE_URL` with your connection string.
+
+Run an initial database migration:
+
+```bash
+npm run db:migrate
+```
 
 Start the development server with HMR:
 
@@ -49,6 +56,7 @@ npm run build
 To build and run using Docker:
 
 ```bash
+# For npm
 docker build -t my-app .
 
 # Run the container
@@ -73,6 +81,7 @@ Make sure to deploy the output of `npm run build`
 ```
 ├── package.json
 ├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
+├── server.js
 ├── build/
 │   ├── client/    # Static assets
 │   └── server/    # Server-side code
