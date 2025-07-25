@@ -1,13 +1,16 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
-  "name": "Node.js & TypeScript",
+  "name": "Tracking App Dev Container",
   "dockerComposeFile": [
     "../docker-compose.yml"
   ],
 
   "service": "tracking",
   "workspaceFolder": "/app",
+
+  // Shutdown action to preserve container for reuse
+  "shutdownAction": "stopCompose",
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   // "features": {},

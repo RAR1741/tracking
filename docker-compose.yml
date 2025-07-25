@@ -1,3 +1,5 @@
+name: tracking
+
 volumes:
   postgres_data:
 
