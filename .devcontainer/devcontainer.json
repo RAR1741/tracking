@@ -15,7 +15,9 @@
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   "forwardPorts": [
     3000,
-    5432
+    5432,
+    5173,
+    24678
   ],
 
   "portsAttributes": {
@@ -25,6 +27,14 @@
     },
     "5432": {
       "label": "Postgres",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "Vite",
+      "onAutoForward": "notify"
+    },
+    "24678": {
+      "label": "WebSocket",
       "onAutoForward": "notify"
     }
   },
