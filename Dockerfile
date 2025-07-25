@@ -1,5 +1,5 @@
 ARG VARIANT="22-bookworm"
-FROM mcr.microsoft.com/devcontainers/typescript-node:1-${VARIANT} AS tracking
+FROM mcr.microsoft.com/devcontainers/typescript-node:1-${VARIANT}
 
 # Set working directory
 WORKDIR /app
@@ -21,4 +21,5 @@ COPY --chown=node:node . .
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "run", "dev"]
+# CMD ["npm", "run", "dev"]
+CMD ["tail", "-f", "/dev/null"]
