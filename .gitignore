@@ -3,6 +3,9 @@
 /node_modules/
 *.tsbuildinfo
 
+# Vite
+.vite/
+
 # React Router
 /.react-router/
 /build/
