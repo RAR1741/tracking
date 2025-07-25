@@ -1,3 +1,6 @@
 .react-router
 build
 node_modules
+.git
+*.log
+.DS_Store
