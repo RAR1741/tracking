@@ -1,0 +1,35 @@
+volumes:
+  postgres_data:
+
+
+services:
+  ###########################
+  # SHARED POSTGRES CLUSTER #
+  ###########################
+  postgres:
+    image: postgres:17
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    logging:
+      driver: "none"
+    ports:
+      - "5432:5432"
+    hostname: postgres
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+  tracking:
+    image: tracking:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://postgres@postgres:5432/postgres
+      PORT: 3000
+    logging:
+      driver: "none"
+    hostname: tracking
