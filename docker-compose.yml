@@ -27,6 +27,9 @@ services:
       - "3000:3000"
     depends_on:
       - postgres
+    volumes:
+      - .:/app
+      - /app/node_modules
     environment:
       DATABASE_URL: postgres://postgres@postgres:5432/postgres
       PORT: 3000
