@@ -33,13 +33,17 @@ npm run lint:check
 ## Automatic Linting
 
 ### VS Code Integration
+
 The project is configured to:
+
 - Show linting errors and warnings in the editor
 - Automatically fix issues on file save
 - Format code on save
 
 ### Pre-commit Hooks
+
 Husky and lint-staged are configured to:
+
 - Run ESLint on staged files before each commit
 - Automatically fix issues when possible
 - Prevent commits if there are unfixable errors
@@ -47,12 +51,14 @@ Husky and lint-staged are configured to:
 ## Rule Configuration
 
 The ESLint configuration includes:
+
 - TypeScript-specific rules for type safety
 - React and React Hooks best practices
 - Code quality and consistency rules
 - Import/export organization rules
 
 ### Key Rules
+
 - Enforce consistent type imports (`import type`)
 - Prevent unused variables (with exceptions for underscore-prefixed)
 - Warn about console statements (except in config files)

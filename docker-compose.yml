@@ -3,7 +3,6 @@ name: tracking
 volumes:
   postgres_data:
 
-
 services:
   ###########################
   # SHARED POSTGRES CLUSTER #

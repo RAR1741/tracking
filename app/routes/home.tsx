@@ -20,8 +20,8 @@ export async function action({ request }: Route.ActionArgs) {
     return { guestBookError: "Name and email are required" };
   }
 
-      name = name.trim();
-      email = email.trim();
+  name = name.trim();
+  email = email.trim();
   if (!name || !email) {
     return { guestBookError: "Name and email are required" };
   }
@@ -29,7 +29,7 @@ export async function action({ request }: Route.ActionArgs) {
   const db = database();
   try {
     await db.insert(schema.guestBook).values({ name, email });
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   } catch (error) {
     return { guestBookError: "Error adding to guest book" };
   }
