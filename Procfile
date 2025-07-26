@@ -1,2 +1,2 @@
-release: npx drizzle-kit migrate
+release: npm run db:migrate:prod
 web: npm run start
