@@ -20,8 +20,8 @@ export async function action({ request }: Route.ActionArgs) {
     return { guestBookError: "Name and email are required" };
   }
 
-  name = name.trim();
-  email = email.trim();
+      name = name.trim();
+      email = email.trim();
   if (!name || !email) {
     return { guestBookError: "Name and email are required" };
   }

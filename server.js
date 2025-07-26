@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import compression from "compression";
 import express from "express";
 import morgan from "morgan";

@@ -160,14 +160,57 @@ export default [
     },
   },
 
-  // Ignore patterns
+  // Ignore patterns (migrated from .eslintignore)
   {
     ignores: [
+      // Dependencies
       'node_modules/**',
+
+      // Build outputs
       'dist/**',
       'build/**',
       '.react-router/**',
+
+      // Database migrations
       'drizzle/**',
+
+      // Environment files
+      '.env',
+      '.env.local',
+      '.env.development.local',
+      '.env.test.local',
+      '.env.production.local',
+
+      // Logs
+      '*.log',
+      'npm-debug.log*',
+      'yarn-debug.log*',
+      'yarn-error.log*',
+
+      // Cache directories
+      '.npm/**',
+      '.eslintcache',
+
+      // Temporary files
+      '*.tmp',
+      '*.temp',
+
+      // OS generated files
+      '.DS_Store',
+      '.DS_Store?',
+      '._*',
+      '.Spotlight-V100',
+      '.Trashes',
+      'ehthumbs.db',
+      'Thumbs.db',
+
+      // IDE files
+      '.vscode/**',
+      '.idea/**',
+      '*.swp',
+      '*.swo',
+
+      // Minified files
       '*.min.js',
     ],
   },
