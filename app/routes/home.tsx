@@ -1,9 +1,10 @@
 import { database } from "~/database/context";
 import * as schema from "~/database/schema";
 
-import type { Route } from "./+types/home";
 import { Welcome } from "../welcome/welcome";
+import type { Route } from "./+types/home";
 
+// eslint-disable-next-line no-empty-pattern
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "New React Router App" },
@@ -28,6 +29,7 @@ export async function action({ request }: Route.ActionArgs) {
   const db = database();
   try {
     await db.insert(schema.guestBook).values({ name, email });
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   } catch (error) {
     return { guestBookError: "Error adding to guest book" };
   }

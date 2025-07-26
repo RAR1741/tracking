@@ -1,9 +1,9 @@
 {
-	"folders": [
-		{
-			"name": "tracking",
-			"path": "."
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "name": "tracking",
+      "path": ".",
+    },
+  ],
+  "settings": {},
 }

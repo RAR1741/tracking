@@ -15,12 +15,12 @@ const getConnectionUrl = () => {
   if (!isProduction) return databaseUrl;
 
   // Check if SSL is already configured in the URL
-  if (databaseUrl.includes('sslmode=') || databaseUrl.includes('ssl=')) {
+  if (databaseUrl.includes("sslmode=") || databaseUrl.includes("ssl=")) {
     return databaseUrl;
   }
 
   // Add SSL requirement for production
-  const separator = databaseUrl.includes('?') ? '&' : '?';
+  const separator = databaseUrl.includes("?") ? "&" : "?";
   return `${databaseUrl}${separator}sslmode=require`;
 };
 

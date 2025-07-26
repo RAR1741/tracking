@@ -3,7 +3,6 @@ name: tracking
 volumes:
   postgres_data:
 
-
 services:
   ###########################
   # SHARED POSTGRES CLUSTER #
@@ -32,9 +31,8 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    environment:
-      DATABASE_URL: postgres://postgres@postgres:5432/postgres
-      PORT: 3000
+    env_file:
+      - ./.env
     # logging:
     #   driver: "none"
     hostname: tracking
