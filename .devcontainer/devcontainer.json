@@ -2,9 +2,7 @@
 // README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
 {
   "name": "Tracking App Dev Container",
-  "dockerComposeFile": [
-    "../docker-compose.yml"
-  ],
+  "dockerComposeFile": ["../docker-compose.yml"],
 
   "service": "tracking",
   "workspaceFolder": "/app",
@@ -16,12 +14,7 @@
   // "features": {},
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
-  "forwardPorts": [
-    3000,
-    5432,
-    5173,
-    24678
-  ],
+  "forwardPorts": [3000, 5432, 5173, 24678],
 
   "portsAttributes": {
     "3000": {
@@ -55,7 +48,9 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "ms-azuretools.vscode-docker",
-        "rvest.vs-code-prettier-eslint"
+        "rvest.vs-code-prettier-eslint",
+        "inferrinizzard.prettier-sql-vscode",
+        "github.copilot-chat"
       ]
     }
   }
