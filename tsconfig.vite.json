@@ -6,7 +6,8 @@
     "app/**/.server/**/*",
     "app/**/.client/**/*",
     "database/**/*",
-    "server/**/*"
+    "server/**/*",
+    "auth.ts"
   ],
   "compilerOptions": {
     "composite": true,

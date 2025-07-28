@@ -3,10 +3,33 @@ import { Form, useNavigation } from "react-router";
 import logoDark from "./logo-dark.svg";
 import logoLight from "./logo-light.svg";
 
+type Session = {
+  session: {
+    id: string;
+    userId: string;
+    expiresAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    token: string;
+    ipAddress?: string | null;
+    userAgent?: string | null;
+  };
+  user: {
+    id: string;
+    name: string | null;
+    email: string;
+    emailVerified: boolean;
+    image?: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+} | null;
+
 export function Welcome({
   guestBook,
   guestBookError,
   message,
+  session,
 }: {
   guestBook: {
     name: string;
@@ -14,6 +37,7 @@ export function Welcome({
   }[];
   guestBookError?: string;
   message: string;
+  session?: Session;
 }) {
   const navigation = useNavigation();
 
@@ -35,6 +59,52 @@ export function Welcome({
             />
           </div>
         </header>
+
+        {/* Auth Status Section */}
+        {session ? (
+          <div className="max-w-[300px] w-full px-4">
+            <div className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
+              <div className="text-center">
+                <p className="text-sm text-gray-600 dark:text-gray-400">Welcome back!</p>
+                <p className="font-semibold text-gray-900 dark:text-white">{session.user.name}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{session.user.email}</p>
+              </div>
+              <div className="flex justify-center">
+                <Form method="post" action="/auth/signout">
+                  <button
+                    type="submit"
+                    className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                  >
+                    Sign Out
+                  </button>
+                </Form>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="max-w-[300px] w-full px-4">
+            <div className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
+              <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+                Sign in to access all features
+              </p>
+              <div className="flex justify-center space-x-4">
+                <a
+                  href="/auth?mode=signin"
+                  className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                >
+                  Sign In
+                </a>
+                <a
+                  href="/auth?mode=signup"
+                  className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+                >
+                  Sign Up
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="max-w-[300px] w-full space-y-6 px-4">
           <nav className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
             <p className="leading-6 text-gray-700 dark:text-gray-200 text-center">
