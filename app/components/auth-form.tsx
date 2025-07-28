@@ -55,8 +55,13 @@ export function AuthForm({
       // Redirect to home page after successful auth
       navigate("/");
     } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error("Auth error:", err);
+      if (process.env.NODE_ENV === "development") {
+        // eslint-disable-next-line no-console
+        console.error("Auth error:", err);
+      } else {
+        // Log a generic error message in production
+        console.error("An authentication error occurred.");
+      }
       setError("Authentication failed. Please try again.");
     } finally {
       setIsSubmitting(false);
