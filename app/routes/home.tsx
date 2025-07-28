@@ -1,5 +1,6 @@
 import { database } from "~/database/context";
 import * as schema from "~/database/schema";
+import { auth } from "../../auth.js";
 
 import { Welcome } from "../welcome/welcome";
 import type { Route } from "./+types/home";
@@ -35,8 +36,13 @@ export async function action({ request }: Route.ActionArgs) {
   }
 }
 
-export async function loader({ context }: Route.LoaderArgs) {
+export async function loader({ context, request }: Route.LoaderArgs) {
   const db = database();
+
+  // Get session information - create proper Headers object
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
 
   const guestBook = await db.query.guestBook.findMany({
     columns: {
@@ -48,6 +54,7 @@ export async function loader({ context }: Route.LoaderArgs) {
   return {
     guestBook,
     message: context.VALUE_FROM_EXPRESS,
+    session,
   };
 }
 
@@ -57,6 +64,7 @@ export default function Home({ actionData, loaderData }: Route.ComponentProps) {
       guestBook={loaderData.guestBook}
       guestBookError={actionData?.guestBookError}
       message={loaderData.message}
+      session={loaderData.session}
     />
   );
 }
