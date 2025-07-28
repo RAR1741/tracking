@@ -65,9 +65,15 @@ export function Welcome({
           <div className="max-w-[300px] w-full px-4">
             <div className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
               <div className="text-center">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Welcome back!</p>
-                <p className="font-semibold text-gray-900 dark:text-white">{session.user.name}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{session.user.email}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Welcome back!
+                </p>
+                <p className="font-semibold text-gray-900 dark:text-white">
+                  {session.user.name}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {session.user.email}
+                </p>
               </div>
               <div className="flex justify-center">
                 <Form method="post" action="/auth/signout">
@@ -99,6 +105,25 @@ export function Welcome({
                   className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
                 >
                   Sign Up
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Admin Links Section */}
+        {session && (
+          <div className="max-w-[300px] w-full px-4">
+            <div className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
+              <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+                Admin Tools
+              </p>
+              <div className="flex justify-center">
+                <a
+                  href="/users"
+                  className="text-sm text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300"
+                >
+                  Manage Users
                 </a>
               </div>
             </div>
