@@ -1,14 +1,67 @@
-import { Form, useNavigation } from "react-router";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { signIn, signUp } from "~/lib/auth-client";
 
 export function AuthForm({
   mode,
-  error,
+  error: serverError,
 }: {
   mode: "signin" | "signup";
   error?: string;
 }) {
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
+  const navigate = useNavigate();
+  const [error, setError] = useState(serverError);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setError(undefined);
+
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const name = formData.get("name") as string;
+
+    try {
+      if (mode === "signup") {
+        if (!name) {
+          setError("Name is required for sign up");
+          return;
+        }
+
+        const result = await signUp.email({
+          email,
+          password,
+          name,
+        });
+
+        if (result.error) {
+          setError(result.error.message);
+          return;
+        }
+      } else {
+        const result = await signIn.email({
+          email,
+          password,
+        });
+
+        if (result.error) {
+          setError(result.error.message);
+          return;
+        }
+      }
+
+      // Redirect to home page after successful auth
+      navigate("/");
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("Auth error:", err);
+      setError("Authentication failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="max-w-md mx-auto mt-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
@@ -16,9 +69,7 @@ export function AuthForm({
         {mode === "signin" ? "Sign In" : "Sign Up"}
       </h1>
 
-      <Form method="post" className="space-y-4">
-        <input type="hidden" name="mode" value={mode} />
-
+      <form onSubmit={handleSubmit} className="space-y-4">
         {mode === "signup" && (
           <div>
             <label
@@ -74,9 +125,7 @@ export function AuthForm({
         </div>
 
         {error && (
-          <div className="text-red-500 dark:text-red-400 text-sm">
-            {error}
-          </div>
+          <div className="text-red-500 dark:text-red-400 text-sm">{error}</div>
         )}
 
         <button
@@ -87,14 +136,16 @@ export function AuthForm({
           {isSubmitting
             ? "Loading..."
             : mode === "signin"
-            ? "Sign In"
-            : "Sign Up"}
+              ? "Sign In"
+              : "Sign Up"}
         </button>
-      </Form>
+      </form>
 
       <div className="mt-4 text-center">
         <span className="text-sm text-gray-600 dark:text-gray-400">
-          {mode === "signin" ? "Don't have an account? " : "Already have an account? "}
+          {mode === "signin"
+            ? "Don't have an account? "
+            : "Already have an account? "}
         </span>
         <a
           href={mode === "signin" ? "/auth?mode=signup" : "/auth?mode=signin"}

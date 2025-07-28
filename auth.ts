@@ -22,13 +22,31 @@ export const auth = betterAuth({
       ...schema,
     },
   }),
+  baseURL:
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3000"
+      : process.env.AUTH_URL,
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false,
+    requireEmailVerification: false, // TODO: Enable this in production
   },
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // 1 day
+  },
+  trustedOrigins:
+    process.env.NODE_ENV === "development"
+      ? [
+          "http://localhost:3000",
+          "http://localhost:5173",
+          "http://127.0.0.1:3000",
+          "http://127.0.0.1:5173",
+        ]
+      : [],
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: process.env.NODE_ENV === "development",
+    },
   },
 });
 
