@@ -60,6 +60,7 @@ export function AuthForm({
         console.error("Auth error:", err);
       } else {
         // Log a generic error message in production
+        // eslint-disable-next-line no-console
         console.error("An authentication error occurred.");
       }
       setError("Authentication failed. Please try again.");
