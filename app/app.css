@@ -4,11 +4,35 @@
   --font-sans:
     "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  /* RAR Brand Colors */
+  --color-rar-red: #ee1d23;
+  --color-rar-black: #231f20;
+  --color-rar-dark-gray: #595a5b;
+  --color-rar-light-gray: #dcdddf;
+
+  /* Custom color palette based on RAR brand */
+  --color-red-500: #ee1d23;
+  --color-red-600: #d21a20;
+  --color-red-700: #b6171c;
+  --color-red-400: #f13d42;
+  --color-red-300: #f45c61;
+
+  --color-gray-900: #231f20;
+  --color-gray-800: #2d2a2b;
+  --color-gray-700: #595a5b;
+  --color-gray-600: #6b6c6d;
+  --color-gray-500: #7d7e7f;
+  --color-gray-400: #9a9b9c;
+  --color-gray-300: #b8b9ba;
+  --color-gray-200: #dcdddf;
+  --color-gray-100: #eaeaeb;
+  --color-gray-50: #f5f5f5;
 }
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  @apply bg-gray-50 dark:bg-gray-900;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
