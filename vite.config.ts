@@ -9,9 +9,14 @@ export default defineConfig(({ isSsrBuild }) => ({
       ? {
           input: "./server/app.ts",
         }
-      : undefined,
+      : {
+          external: ["node:async_hooks"],
+        },
   },
   plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+  optimizeDeps: {
+    exclude: ["better-auth"],
+  },
   server: {
     host: "0.0.0.0",
     port: 3000,

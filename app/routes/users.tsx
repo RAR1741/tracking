@@ -121,7 +121,7 @@ export default function Users() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <a
                         href={`/users/${user.id}/edit`}
-                        className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                        className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
                       >
                         Edit
                       </a>
@@ -137,7 +137,7 @@ export default function Users() {
       <div className="mt-8 flex justify-center">
         <a
           href="/"
-          className="bg-gray-600 text-white py-2 px-6 rounded-md hover:bg-gray-700"
+          className="bg-gray-600 text-white py-2 px-6 rounded-md hover:bg-gray-700 transition-colors"
         >
           Back to Home
         </a>

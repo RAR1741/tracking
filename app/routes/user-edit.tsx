@@ -203,7 +203,7 @@ export default function UserEdit() {
                 id="name"
                 name="name"
                 defaultValue={userData.name || ""}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
               />
             </div>
             <div>
@@ -218,13 +218,13 @@ export default function UserEdit() {
                 id="email"
                 name="email"
                 defaultValue={userData.email}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
               />
             </div>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? "Saving..." : "Save Changes"}
             </button>
@@ -245,14 +245,14 @@ export default function UserEdit() {
               userData.roles.map((role) => (
                 <div
                   key={role.id}
-                  className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900 rounded-md"
+                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-md border border-gray-200 dark:border-gray-700"
                 >
                   <div>
-                    <span className="font-medium text-blue-900 dark:text-blue-100">
+                    <span className="font-medium text-gray-900 dark:text-gray-100">
                       {role.name}
                     </span>
                     {role.description && (
-                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
                         {role.description}
                       </p>
                     )}
@@ -283,7 +283,7 @@ export default function UserEdit() {
                 <input type="hidden" name="actionType" value="assignRole" />
                 <select
                   name="roleId"
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors"
                 >
                   <option value="">Select a role...</option>
                   {availableRoles.map((role) => (
@@ -295,7 +295,7 @@ export default function UserEdit() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:opacity-50"
+                  className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:opacity-50 transition-colors"
                 >
                   Assign
                 </button>

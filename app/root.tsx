@@ -7,8 +7,12 @@ import {
   ScrollRestoration,
 } from "react-router";
 
+import { auth } from "../auth.js";
 import type { Route } from "./+types/root";
 import "./app.css";
+import { Header } from "./components/header";
+import { createAuthContextFromSession } from "./lib/auth-utils";
+import { createPermissionChecker } from "./lib/permissions";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -22,6 +26,40 @@ export const links: Route.LinksFunction = () => [
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
 ];
+
+export async function loader({ request }: Route.LoaderArgs) {
+  // Get session information for the header
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
+
+  // Check permissions on the server side
+  let permissions = {
+    canManageUsers: false,
+    isAdmin: false,
+  };
+
+  if (session?.user) {
+    const authContext = createAuthContextFromSession(session);
+    const permissionChecker = createPermissionChecker(authContext);
+
+    try {
+      const [canManageUsers, isAdmin] = await Promise.all([
+        permissionChecker.canManageUsers(),
+        permissionChecker.isAdmin(),
+      ]);
+      permissions = { canManageUsers, isAdmin };
+    } catch {
+      // If permission check fails, default to false
+      permissions = { canManageUsers: false, isAdmin: false };
+    }
+  }
+
+  return {
+    session,
+    permissions,
+  };
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -41,8 +79,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function App() {
-  return <Outlet />;
+export default function App({ loaderData }: Route.ComponentProps) {
+  return (
+    <>
+      <Header
+        session={loaderData.session}
+        permissions={loaderData.permissions}
+      />
+      <main className="min-h-[calc(100vh-3.5rem)]">
+        <Outlet />
+      </main>
+    </>
+  );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
@@ -61,15 +109,24 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     stack = error.stack;
   }
 
+  // Default permissions for error boundary
+  const defaultPermissions = {
+    canManageUsers: false,
+    isAdmin: false,
+  };
+
   return (
-    <main className="pt-16 p-4 container mx-auto">
-      <h1>{message}</h1>
-      <p>{details}</p>
-      {stack && (
-        <pre className="w-full p-4 overflow-x-auto">
-          <code>{stack}</code>
-        </pre>
-      )}
-    </main>
+    <>
+      <Header session={null} permissions={defaultPermissions} />
+      <main className="pt-16 p-4 container mx-auto">
+        <h1>{message}</h1>
+        <p>{details}</p>
+        {stack && (
+          <pre className="w-full p-4 overflow-x-auto">
+            <code>{stack}</code>
+          </pre>
+        )}
+      </main>
+    </>
   );
 }

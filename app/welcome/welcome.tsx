@@ -98,13 +98,13 @@ export function Welcome({
               <div className="flex justify-center space-x-4">
                 <a
                   href="/auth?mode=signin"
-                  className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                  className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
                 >
                   Sign In
                 </a>
                 <a
                   href="/auth?mode=signup"
-                  className="text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+                  className="text-sm text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors font-medium"
                 >
                   Sign Up
                 </a>
@@ -123,7 +123,7 @@ export function Welcome({
               <div className="flex justify-center">
                 <a
                   href="/users"
-                  className="text-sm text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300"
+                  className="text-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
                 >
                   Manage Users
                 </a>
@@ -141,7 +141,7 @@ export function Welcome({
               {resources.map(({ href, text, icon }) => (
                 <li key={href}>
                   <a
-                    className="group flex items-center gap-3 self-stretch p-3 leading-normal text-blue-700 hover:underline dark:text-blue-500"
+                    className="group flex items-center gap-3 self-stretch p-3 leading-normal text-red-600 hover:underline dark:text-red-400 transition-colors"
                     href={href}
                     target="_blank"
                     rel="noreferrer"
@@ -171,19 +171,19 @@ export function Welcome({
                 name="name"
                 placeholder="Name"
                 required
-                className="w-full dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:focus:ring-blue-500 h-10 px-3 rounded-lg border border-gray-200 focus:ring-1 focus:ring-blue-500"
+                className="w-full dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:focus:ring-red-500 h-10 px-3 rounded-lg border border-gray-200 focus:ring-1 focus:ring-red-500 transition-colors"
               />
               <input
                 name="email"
                 type="email"
                 placeholder="your@email.com"
                 required
-                className="w-full dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:focus:ring-blue-500 h-10 px-3 rounded-lg border border-gray-200 focus:ring-1 focus:ring-blue-500"
+                className="w-full dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:focus:ring-red-500 h-10 px-3 rounded-lg border border-gray-200 focus:ring-1 focus:ring-red-500 transition-colors"
               />
               <button
                 type="submit"
                 disabled={navigation.state === "submitting"}
-                className="w-full h-10 px-3 text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+                className="w-full h-10 px-3 text-white bg-red-500 rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Sign Guest Book
               </button>
