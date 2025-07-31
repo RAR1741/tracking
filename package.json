@@ -7,6 +7,7 @@
     "db:generate": "dotenv -- drizzle-kit generate",
     "db:migrate": "dotenv -- drizzle-kit migrate",
     "db:migrate:prod": "drizzle-kit migrate",
+    "db:seed": "dotenv -- tsx scripts/seed-roles.ts",
     "dev": "dotenv -- node server.js --host=0.0.0.0",
     "start": "node server.js --host=0.0.0.0",
     "typecheck": "react-router typegen && tsc -b",
