@@ -6,6 +6,10 @@ interface Session {
   };
 }
 
+const MESSAGE_LOGIN = "Please sign in to continue";
+const MESSAGE_PERMISSION_DENIED =
+  "You don't have permission to access that page";
+
 // Helper to extract session from request and create auth context
 export function createAuthContextFromSession(
   session: Session | null
@@ -21,11 +25,25 @@ export async function requirePermission(
   authContext: AuthContext,
   permission: string
 ) {
+  if (!authContext.isAuthenticated) {
+    throw new Response(null, {
+      status: 302,
+      headers: {
+        Location: "/auth?mode=signin&message=" + MESSAGE_LOGIN,
+      },
+    });
+  }
+
   const permissions = createPermissionChecker(authContext);
   const hasAccess = await permissions.can(permission);
 
   if (!hasAccess) {
-    throw new Response("Forbidden", { status: 403 });
+    throw new Response(null, {
+      status: 302,
+      headers: {
+        Location: "/auth?mode=signin&message=" + MESSAGE_PERMISSION_DENIED,
+      },
+    });
   }
 }
 
@@ -33,16 +51,35 @@ export async function requireAnyPermission(
   authContext: AuthContext,
   permissions: string[]
 ) {
+  if (!authContext.isAuthenticated) {
+    throw new Response(null, {
+      status: 302,
+      headers: {
+        Location: "/auth?mode=signin&message=" + MESSAGE_LOGIN,
+      },
+    });
+  }
+
   const permChecker = createPermissionChecker(authContext);
   const hasAccess = await permChecker.canAny(permissions);
 
   if (!hasAccess) {
-    throw new Response("Forbidden", { status: 403 });
+    throw new Response(null, {
+      status: 302,
+      headers: {
+        Location: "/auth?mode=signin&message=" + MESSAGE_PERMISSION_DENIED,
+      },
+    });
   }
 }
 
 export async function requireAuth(authContext: AuthContext) {
   if (!authContext.isAuthenticated) {
-    throw new Response("Unauthorized", { status: 401 });
+    throw new Response(null, {
+      status: 302,
+      headers: {
+        Location: "/auth?mode=signin&message=" + MESSAGE_LOGIN,
+      },
+    });
   }
 }
