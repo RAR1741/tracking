@@ -1,8 +1,14 @@
-/* eslint-disable no-console */
 import type { Route } from "./+types/qr.js";
 
-import * as nodeCanvas from "canvas";
-import QRCodeStyling from "qr-code-styling-node/lib/qr-code-styling.common.js";
+import nodeCanvas from "canvas";
+import { JSDOM } from "jsdom";
+import type {
+  ErrorCorrectionLevel,
+  Mode,
+  Options,
+  TypeNumber,
+} from "qr-code-styling";
+import QRCodeStyling from "qr-code-styling";
 
 // eslint-disable-next-line no-empty-pattern
 export function meta({}: Route.MetaArgs) {
@@ -12,86 +18,53 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const genQRCode = async (text: string) => {
-  // QR code options
-  const options = {
-    width: 500,
-    height: 500,
-    data: text,
+export async function loader() {
+  return {
+    message: "QR Code generator is ready",
+  };
+}
+
+export default async function Qr() {
+  const options: Options = {
+    width: 300,
+    height: 300,
+    type: "svg",
+    jsdom: JSDOM,
+    nodeCanvas,
+    data: "http://qr-code-styling.com",
     image:
-      "https://cdn.glitch.global/9c8a8df4-539c-42ca-aae4-0d8cc2a11a85/NewRARLogo.png?v=1714802634463",
-    dotsOptions: {
-      color: "#000000",
-      type: "square" as const,
-    },
-    backgroundOptions: {
-      color: "#ffffff",
-    },
+      "https://assets.vercel.com/image/upload/front/favicon/vercel/180x180.png",
+    margin: 10,
     qrOptions: {
-      errorCorrectionLevel: "H" as const,
+      typeNumber: 0 as TypeNumber,
+      mode: "Byte" as Mode,
+      errorCorrectionLevel: "Q" as ErrorCorrectionLevel,
     },
     imageOptions: {
+      saveAsBlob: true,
+      hideBackgroundDots: true,
+      imageSize: 0.4,
+      margin: 20,
       crossOrigin: "anonymous",
-      margin: 2,
+    },
+    dotsOptions: {
+      color: "#222222",
+    },
+    backgroundOptions: {
+      color: "#5FD4F3",
     },
   };
 
-  const qrCodeImage = new QRCodeStyling({
-    nodeCanvas,
-    ...options,
-  });
-
-  const image = await qrCodeImage.getRawData("png");
-  console.log("QR Code generated successfully");
-  console.log(image);
-
-  return image;
-};
-
-// export async function loader({ context, request }: Route.LoaderArgs) {
-//   const db = database();
-
-//   // Get session information - create proper Headers object
-//   const session = await auth.api.getSession({
-//     headers: request.headers,
-//   });
-
-//   // Check if user can manage users
-//   let canManageUsers = false;
-//   if (session?.user) {
-//     const authContext = createAuthContextFromSession(session);
-//     const permissions = createPermissionChecker(authContext);
-//     try {
-//       canManageUsers = await permissions.can(PERMISSIONS.USER_UPDATE);
-//     } catch {
-//       // If permission check fails, default to false
-//       canManageUsers = false;
-//     }
-//   }
-
-//   const guestBook = await db.query.guestBook.findMany({
-//     columns: {
-//       id: true,
-//       name: true,
-//     },
-//   });
-
-//   return {
-//     guestBook,
-//     message: context.VALUE_FROM_EXPRESS,
-//     session,
-//     canManageUsers,
-//   };
-// }
-
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-export default function Qr({ actionData, loaderData }: Route.ComponentProps) {
-  genQRCode("Sample QR Code Text");
+  const qrCode = new QRCodeStyling(options);
+  const buffer = await qrCode.getRawData("svg");
+  const svg = buffer?.toString();
 
   return (
     <>
       <h1>QR Code Generator</h1>
       <p>Generate and manage your QR codes.</p>
+      <br />
+      {svg ? <div dangerouslySetInnerHTML={{ __html: svg }} /> : null}
     </>
   );
 }
