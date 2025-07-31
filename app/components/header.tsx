@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router";
-import { signOut } from "../lib/auth-client";
+import { signOut } from "../../server/auth/auth-client";
 
 interface User {
   id: string;
@@ -46,7 +46,7 @@ export function Header({ session, permissions }: HeaderProps) {
         >
           <div className="h-10 w-35 flex items-center justify-center">
             <img
-              src="/hor-logo.png"
+              src="/RAR-horizontal-logo.png"
               alt="Red Alert Robotics Logo"
               onError={(e) => {
                 // Fallback if logo doesn't load
