@@ -1,4 +1,7 @@
-import { createPermissionChecker, type AuthContext } from "./permissions";
+import {
+  createPermissionChecker,
+  type AuthContext,
+} from "../../app/lib/permissions";
 
 interface Session {
   user?: {

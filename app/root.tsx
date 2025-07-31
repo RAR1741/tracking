@@ -7,11 +7,11 @@ import {
   ScrollRestoration,
 } from "react-router";
 
-import { auth } from "../auth.js";
+import { createAuthContextFromSession } from "../server/auth/auth-utils";
+import { auth } from "../server/auth/auth.js";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Header } from "./components/header";
-import { createAuthContextFromSession } from "./lib/auth-utils";
 import { createPermissionChecker } from "./lib/permissions";
 
 export const links: Route.LinksFunction = () => [

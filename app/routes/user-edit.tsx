@@ -5,14 +5,14 @@ import {
   useLoaderData,
   useNavigation,
 } from "react-router";
-import { auth } from "../../auth";
 import { database } from "../../database/context";
 import { user } from "../../database/schema";
 import { PERMISSIONS } from "../../database/seed";
+import { auth } from "../../server/auth/auth";
 import {
   createAuthContextFromSession,
   requirePermission,
-} from "../lib/auth-utils";
+} from "../../server/auth/auth-utils";
 import {
   assignPermissionToUser,
   assignRoleToUser,

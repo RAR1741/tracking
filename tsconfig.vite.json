@@ -7,13 +7,14 @@
     "app/**/.client/**/*",
     "database/**/*",
     "server/**/*",
-    "auth.ts"
+    "types/**/*"
   ],
   "compilerOptions": {
     "composite": true,
     "strict": true,
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "types": ["vite/client"],
+    // "typeRoots": ["./types"],
     "target": "ES2022",
     "module": "ES2022",
     "moduleResolution": "bundler",

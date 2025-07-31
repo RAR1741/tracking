@@ -1,8 +1,8 @@
 import { database } from "~/database/context";
 import * as schema from "~/database/schema";
-import { auth } from "../../auth.js";
 import { PERMISSIONS } from "../../database/seed";
-import { createAuthContextFromSession } from "../lib/auth-utils";
+import { createAuthContextFromSession } from "../../server/auth/auth-utils";
+import { auth } from "../../server/auth/auth.js";
 import { createPermissionChecker } from "../lib/permissions";
 
 import { Welcome } from "../welcome/welcome";

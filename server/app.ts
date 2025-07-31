@@ -7,7 +7,7 @@ import "react-router";
 
 import { DatabaseContext } from "~/database/context";
 import * as schema from "~/database/schema";
-import { auth } from "../auth.js";
+import { auth } from "./auth/auth.js";
 
 declare module "react-router" {
   interface AppLoadContext {

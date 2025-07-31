@@ -7,4 +7,5 @@ export default [
   route("users", "routes/users.tsx"),
   route("users/:userId/edit", "routes/user-edit.tsx"),
   route("admin", "routes/admin.tsx"),
+  route("qr", "routes/qr.tsx"),
 ] satisfies RouteConfig;

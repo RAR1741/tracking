@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { signIn, signUp } from "~/lib/auth-client";
+import { signIn, signUp } from "server/auth/auth-client";
 
 export function AuthForm({
   mode,

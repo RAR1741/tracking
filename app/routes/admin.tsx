@@ -1,9 +1,9 @@
-import { auth } from "../../auth";
 import { PERMISSIONS } from "../../database/seed";
+import { auth } from "../../server/auth/auth";
 import {
   createAuthContextFromSession,
   requirePermission,
-} from "../lib/auth-utils";
+} from "../../server/auth/auth-utils";
 
 interface LoaderArgs {
   request: Request;
