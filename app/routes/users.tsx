@@ -1,8 +1,27 @@
 import { useLoaderData } from "react-router";
+import { auth } from "../../auth";
 import { database } from "../../database/context";
 import { user } from "../../database/schema";
+import { PERMISSIONS } from "../../database/seed";
+import {
+  createAuthContextFromSession,
+  requirePermission,
+} from "../lib/auth-utils";
 
-export async function loader() {
+interface LoaderArgs {
+  request: Request;
+}
+
+export async function loader({ request }: LoaderArgs) {
+  // Get session information
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
+
+  // Create auth context and check permissions
+  const authContext = createAuthContextFromSession(session);
+  await requirePermission(authContext, PERMISSIONS.USER_UPDATE);
+
   const db = database();
   const users = await db
     .select({

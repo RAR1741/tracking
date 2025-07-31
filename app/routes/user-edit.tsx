@@ -5,8 +5,14 @@ import {
   useLoaderData,
   useNavigation,
 } from "react-router";
+import { auth } from "../../auth";
 import { database } from "../../database/context";
 import { user } from "../../database/schema";
+import { PERMISSIONS } from "../../database/seed";
+import {
+  createAuthContextFromSession,
+  requirePermission,
+} from "../lib/auth-utils";
 import {
   assignPermissionToUser,
   assignRoleToUser,
@@ -19,6 +25,7 @@ import {
 
 interface LoaderArgs {
   params: { userId: string };
+  request: Request;
 }
 
 interface ActionArgs {
@@ -26,12 +33,21 @@ interface ActionArgs {
   params: { userId: string };
 }
 
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params, request }: LoaderArgs) {
   const { userId } = params;
 
   if (!userId) {
     throw new Response("User ID is required", { status: 400 });
   }
+
+  // Get session information and check permissions
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
+
+  // Create auth context and check permissions
+  const authContext = createAuthContextFromSession(session);
+  await requirePermission(authContext, PERMISSIONS.USER_UPDATE);
 
   const [userData, allRoles, allPermissions] = await Promise.all([
     getUserWithRolesAndPermissions(userId),
@@ -56,6 +72,15 @@ export async function action({ request, params }: ActionArgs) {
   if (!userId) {
     return { error: "User ID is required" };
   }
+
+  // Get session information and check permissions
+  const session = await auth.api.getSession({
+    headers: request.headers,
+  });
+
+  // Create auth context and check permissions
+  const authContext = createAuthContextFromSession(session);
+  await requirePermission(authContext, PERMISSIONS.USER_UPDATE);
 
   const formData = await request.formData();
   const actionType = formData.get("actionType") as string;

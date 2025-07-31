@@ -30,6 +30,7 @@ export function Welcome({
   guestBookError,
   message,
   session,
+  canManageUsers,
 }: {
   guestBook: {
     name: string;
@@ -38,6 +39,7 @@ export function Welcome({
   guestBookError?: string;
   message: string;
   session?: Session;
+  canManageUsers?: boolean;
 }) {
   const navigation = useNavigation();
 
@@ -112,7 +114,7 @@ export function Welcome({
         )}
 
         {/* Admin Links Section */}
-        {session && (
+        {session && canManageUsers && (
           <div className="max-w-[300px] w-full px-4">
             <div className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4">
               <p className="text-center text-sm text-gray-600 dark:text-gray-400">

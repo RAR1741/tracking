@@ -1,6 +1,9 @@
 import { database } from "~/database/context";
 import * as schema from "~/database/schema";
 import { auth } from "../../auth.js";
+import { PERMISSIONS } from "../../database/seed";
+import { createAuthContextFromSession } from "../lib/auth-utils";
+import { createPermissionChecker } from "../lib/permissions";
 
 import { Welcome } from "../welcome/welcome";
 import type { Route } from "./+types/home";
@@ -44,6 +47,19 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     headers: request.headers,
   });
 
+  // Check if user can manage users
+  let canManageUsers = false;
+  if (session?.user) {
+    const authContext = createAuthContextFromSession(session);
+    const permissions = createPermissionChecker(authContext);
+    try {
+      canManageUsers = await permissions.can(PERMISSIONS.USER_UPDATE);
+    } catch {
+      // If permission check fails, default to false
+      canManageUsers = false;
+    }
+  }
+
   const guestBook = await db.query.guestBook.findMany({
     columns: {
       id: true,
@@ -55,6 +71,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
     guestBook,
     message: context.VALUE_FROM_EXPRESS,
     session,
+    canManageUsers,
   };
 }
 
@@ -65,6 +82,7 @@ export default function Home({ actionData, loaderData }: Route.ComponentProps) {
       guestBookError={actionData?.guestBookError}
       message={loaderData.message}
       session={loaderData.session}
+      canManageUsers={loaderData.canManageUsers}
     />
   );
 }
