@@ -1,6 +1,8 @@
 # Shamelessly stolen from https://github.com/dracco1993/self_updating_wiki
 
 name: Update wiki
+permissions:
+  contents: write
 
 on:
   push:
