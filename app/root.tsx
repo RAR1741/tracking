@@ -82,7 +82,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App({ loaderData }: Route.ComponentProps) {
   return (
     <>
-      <Header session={loaderData.session} permissions={loaderData.permissions} />
+      <Header
+        session={loaderData.session}
+        permissions={loaderData.permissions}
+      />
       <main className="min-h-[calc(100vh-3.5rem)]">
         <Outlet />
       </main>

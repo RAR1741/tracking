@@ -37,41 +37,26 @@ export function Header({ session, permissions }: HeaderProps) {
   const displayName = session?.user?.name || session?.user?.email || "User";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-gray-950/95 dark:supports-[backdrop-filter]:bg-gray-950/60">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-gray-900/95 dark:border-gray-700 dark:supports-[backdrop-filter]:bg-gray-900/60">
       <div className="container mx-auto flex h-14 items-center px-4">
         {/* Logo */}
         <Link
           to="/"
           className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
         >
-          <div className="h-6 w-6 flex items-center justify-center">
+          <div className="h-10 w-35 flex items-center justify-center">
             <img
-              src="/logo-light.svg"
-              alt="Logo"
-              className="h-6 w-6 dark:hidden"
+              src="/hor-logo.png"
+              alt="Red Alert Robotics Logo"
               onError={(e) => {
                 // Fallback if logo doesn't load
                 const target = e.target as HTMLImageElement;
                 target.style.display = "none";
               }}
             />
-            <img
-              src="/logo-dark.svg"
-              alt="Logo"
-              className="h-6 w-6 hidden dark:block"
-              onError={(e) => {
-                // Fallback if logo doesn't load
-                const target = e.target as HTMLImageElement;
-                target.style.display = "none";
-              }}
-            />
-            {/* Fallback icon if images fail to load */}
-            <div className="h-6 w-6 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-bold">
-              A
-            </div>
           </div>
           <span className="font-bold text-lg text-gray-900 dark:text-white">
-            App
+            RAR Tracking
           </span>
         </Link>
 
@@ -81,7 +66,7 @@ export function Header({ session, permissions }: HeaderProps) {
             <>
               <Link
                 to="/"
-                className="text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200"
+                className="text-sm font-medium transition-colors hover:text-red-600 dark:hover:text-red-400 text-gray-700 dark:text-gray-200"
               >
                 Home
               </Link>
@@ -89,7 +74,7 @@ export function Header({ session, permissions }: HeaderProps) {
               {permissions.canManageUsers && (
                 <Link
                   to="/users"
-                  className="text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200"
+                  className="text-sm font-medium transition-colors hover:text-red-600 dark:hover:text-red-400 text-gray-700 dark:text-gray-200"
                 >
                   Users
                 </Link>
@@ -98,7 +83,7 @@ export function Header({ session, permissions }: HeaderProps) {
               {permissions.isAdmin && (
                 <Link
                   to="/admin"
-                  className="text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200"
+                  className="text-sm font-medium transition-colors hover:text-red-600 dark:hover:text-red-400 text-gray-700 dark:text-gray-200"
                 >
                   Admin
                 </Link>
@@ -124,7 +109,7 @@ export function Header({ session, permissions }: HeaderProps) {
           ) : (
             <Link
               to="/auth"
-              className="text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400 text-gray-700 dark:text-gray-200 px-3 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="text-sm font-medium transition-colors hover:text-red-600 dark:hover:text-red-400 text-gray-700 dark:text-gray-200 px-3 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               Sign In
             </Link>
