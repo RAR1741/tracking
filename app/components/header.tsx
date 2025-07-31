@@ -37,7 +37,7 @@ export function Header({ session, permissions }: HeaderProps) {
   const displayName = session?.user?.name || session?.user?.email || "User";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-gray-900/95 dark:border-gray-700 dark:supports-[backdrop-filter]:bg-gray-900/60">
+    <header className="sticky top-0 z-50 w-full border-b border-red-700 bg-red-600/95 backdrop-blur supports-[backdrop-filter]:bg-red-600/90 dark:bg-red-700/95 dark:border-red-800 dark:supports-[backdrop-filter]:bg-red-700/90">
       <div className="container mx-auto flex h-14 items-center px-4">
         {/* Logo */}
         <Link
@@ -55,9 +55,7 @@ export function Header({ session, permissions }: HeaderProps) {
               }}
             />
           </div>
-          <span className="font-bold text-lg text-gray-900 dark:text-white">
-            RAR Tracking
-          </span>
+          <span className="font-bold text-lg text-rar-black">RAR Tracking</span>
         </Link>
 
         {/* Navigation Menu */}
@@ -66,7 +64,7 @@ export function Header({ session, permissions }: HeaderProps) {
             <>
               <Link
                 to="/"
-                className="text-sm font-medium transition-colors hover:text-red-600 dark:hover:text-red-400 text-gray-700 dark:text-gray-200"
+                className="text-sm font-medium transition-colors hover:text-gray-800 text-rar-black"
               >
                 Home
               </Link>
@@ -74,7 +72,7 @@ export function Header({ session, permissions }: HeaderProps) {
               {permissions.canManageUsers && (
                 <Link
                   to="/users"
-                  className="text-sm font-medium transition-colors hover:text-red-600 dark:hover:text-red-400 text-gray-700 dark:text-gray-200"
+                  className="text-sm font-medium transition-colors hover:text-gray-800 text-rar-black"
                 >
                   Users
                 </Link>
@@ -83,7 +81,7 @@ export function Header({ session, permissions }: HeaderProps) {
               {permissions.isAdmin && (
                 <Link
                   to="/admin"
-                  className="text-sm font-medium transition-colors hover:text-red-600 dark:hover:text-red-400 text-gray-700 dark:text-gray-200"
+                  className="text-sm font-medium transition-colors hover:text-gray-800 text-rar-black"
                 >
                   Admin
                 </Link>
@@ -96,12 +94,12 @@ export function Header({ session, permissions }: HeaderProps) {
         <div className="ml-auto flex items-center space-x-4">
           {session?.user ? (
             <div className="flex items-center space-x-3">
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-200 max-w-[150px] truncate">
+              <span className="text-sm font-medium text-rar-black max-w-[150px] truncate">
                 {displayName}
               </span>
               <button
                 onClick={handleSignOut}
-                className="text-sm font-medium transition-colors hover:text-red-600 dark:hover:text-red-400 text-gray-600 dark:text-gray-300"
+                className="text-sm font-medium transition-colors hover:text-gray-800 text-rar-black"
               >
                 Sign Out
               </button>
@@ -109,7 +107,7 @@ export function Header({ session, permissions }: HeaderProps) {
           ) : (
             <Link
               to="/auth"
-              className="text-sm font-medium transition-colors hover:text-red-600 dark:hover:text-red-400 text-gray-700 dark:text-gray-200 px-3 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="text-sm font-medium transition-colors hover:text-gray-800 text-rar-black px-3 py-1 rounded-md hover:bg-red-700/20"
             >
               Sign In
             </Link>
