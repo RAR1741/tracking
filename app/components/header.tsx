@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { signOut } from "../lib/auth-client";
-import { createAuthContextFromSession } from "../lib/auth-utils";
-import { createPermissionChecker } from "../lib/permissions";
 
 interface User {
   id: string;
@@ -14,44 +11,18 @@ interface Session {
   user?: User;
 }
 
-interface HeaderProps {
-  session?: Session | null;
+interface Permissions {
+  canManageUsers: boolean;
+  isAdmin: boolean;
 }
 
-export function Header({ session }: HeaderProps) {
+interface HeaderProps {
+  session?: Session | null;
+  permissions: Permissions;
+}
+
+export function Header({ session, permissions }: HeaderProps) {
   const navigate = useNavigate();
-  const [permissions, setPermissions] = useState({
-    canManageUsers: false,
-    isAdmin: false,
-  });
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    if (session?.user) {
-      setIsLoading(true);
-      const authContext = createAuthContextFromSession(session);
-      const permissionChecker = createPermissionChecker(authContext);
-
-      // Check permissions
-      Promise.all([
-        permissionChecker.canManageUsers(),
-        permissionChecker.isAdmin(),
-      ])
-        .then(([canManageUsers, isAdmin]) => {
-          setPermissions({ canManageUsers, isAdmin });
-        })
-        .catch(() => {
-          // If permission check fails, default to false
-          setPermissions({ canManageUsers: false, isAdmin: false });
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } else {
-      setPermissions({ canManageUsers: false, isAdmin: false });
-      setIsLoading(false);
-    }
-  }, [session]);
 
   const handleSignOut = async () => {
     try {
@@ -106,7 +77,7 @@ export function Header({ session }: HeaderProps) {
 
         {/* Navigation Menu */}
         <nav className="flex items-center space-x-6 ml-8">
-          {session?.user && !isLoading && (
+          {session?.user && (
             <>
               <Link
                 to="/"

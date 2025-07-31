@@ -11,6 +11,8 @@ import { auth } from "../auth.js";
 import type { Route } from "./+types/root";
 import "./app.css";
 import { Header } from "./components/header";
+import { createAuthContextFromSession } from "./lib/auth-utils";
+import { createPermissionChecker } from "./lib/permissions";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -31,8 +33,31 @@ export async function loader({ request }: Route.LoaderArgs) {
     headers: request.headers,
   });
 
+  // Check permissions on the server side
+  let permissions = {
+    canManageUsers: false,
+    isAdmin: false,
+  };
+
+  if (session?.user) {
+    const authContext = createAuthContextFromSession(session);
+    const permissionChecker = createPermissionChecker(authContext);
+
+    try {
+      const [canManageUsers, isAdmin] = await Promise.all([
+        permissionChecker.canManageUsers(),
+        permissionChecker.isAdmin(),
+      ]);
+      permissions = { canManageUsers, isAdmin };
+    } catch {
+      // If permission check fails, default to false
+      permissions = { canManageUsers: false, isAdmin: false };
+    }
+  }
+
   return {
     session,
+    permissions,
   };
 }
 
@@ -57,7 +82,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App({ loaderData }: Route.ComponentProps) {
   return (
     <>
-      <Header session={loaderData.session} />
+      <Header session={loaderData.session} permissions={loaderData.permissions} />
       <main className="min-h-[calc(100vh-3.5rem)]">
         <Outlet />
       </main>
@@ -81,9 +106,15 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     stack = error.stack;
   }
 
+  // Default permissions for error boundary
+  const defaultPermissions = {
+    canManageUsers: false,
+    isAdmin: false,
+  };
+
   return (
     <>
-      <Header session={null} />
+      <Header session={null} permissions={defaultPermissions} />
       <main className="pt-16 p-4 container mx-auto">
         <h1>{message}</h1>
         <p>{details}</p>
