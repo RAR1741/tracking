@@ -26,8 +26,7 @@ export async function loader() {
     jsdom: JSDOM,
     nodeCanvas,
     data: "text to encode in QR codeasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf",
-    image:
-      "https://assets.vercel.com/image/upload/front/favicon/vercel/180x180.png",
+    image: "/app/public/RAR-square-Logo.png",
     margin: 2,
     qrOptions: {
       typeNumber: 0 as TypeNumber,
