@@ -2,6 +2,7 @@
 import compression from "compression";
 import express from "express";
 import morgan from "morgan";
+import Slack from "./server/slack";
 
 // Short-circuit the type-checking of the built output.
 const BUILD_PATH = "./build/server/index.js";
@@ -46,3 +47,16 @@ if (DEVELOPMENT) {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+// Slack application
+if (process.env.SLACK_BOT_TOKEN && process.env.SLACK_SIGNING_SECRET) {
+  (async () => {
+    await Slack.start(process.env.SLACK_PORT || 3001);
+
+    console.log("⚡️ Slack Bolt app is running!");
+  })();
+} else {
+  console.warn(
+    "⚠️ Slack Bot Token or Signing Secret not set, Slack app will not run."
+  );
+}
