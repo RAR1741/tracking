@@ -1,14 +1,10 @@
-import type { Route } from "./+types/qr.js";
-
-import nodeCanvas from "canvas";
-import { JSDOM } from "jsdom";
 import type {
   ErrorCorrectionLevel,
   Mode,
   Options,
   TypeNumber,
 } from "qr-code-styling";
-import QRCodeStyling from "qr-code-styling";
+import type { Route } from "./+types/qr.js";
 
 // eslint-disable-next-line no-empty-pattern
 export function meta({}: Route.MetaArgs) {
@@ -19,12 +15,10 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader() {
-  return {
-    message: "QR Code generator is ready",
-  };
-}
+  const nodeCanvas = (await import("canvas")).default;
+  const { JSDOM } = await import("jsdom");
+  const QRCodeStyling = (await import("qr-code-styling")).default;
 
-export default async function Qr() {
   const options: Options = {
     width: 300,
     height: 300,
@@ -58,6 +52,15 @@ export default async function Qr() {
   const qrCode = new QRCodeStyling(options);
   const buffer = await qrCode.getRawData("svg");
   const svg = buffer?.toString();
+
+  return {
+    message: "QR Code generator is ready",
+    svg,
+  };
+}
+
+export default function Qr({ loaderData }: Route.ComponentProps) {
+  const { svg } = loaderData;
 
   return (
     <>
