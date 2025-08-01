@@ -20,32 +20,33 @@ export async function loader() {
   const QRCodeStyling = (await import("qr-code-styling")).default;
 
   const options: Options = {
-    width: 300,
-    height: 300,
+    width: 500,
+    height: 500,
     type: "svg",
     jsdom: JSDOM,
     nodeCanvas,
-    data: "http://qr-code-styling.com",
+    data: "text to encode in QR codeasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf",
     image:
       "https://assets.vercel.com/image/upload/front/favicon/vercel/180x180.png",
-    margin: 10,
+    margin: 2,
     qrOptions: {
       typeNumber: 0 as TypeNumber,
       mode: "Byte" as Mode,
-      errorCorrectionLevel: "Q" as ErrorCorrectionLevel,
+      errorCorrectionLevel: "H" as ErrorCorrectionLevel,
     },
     imageOptions: {
       saveAsBlob: true,
       hideBackgroundDots: true,
       imageSize: 0.4,
-      margin: 20,
+      margin: 2,
       crossOrigin: "anonymous",
     },
     dotsOptions: {
-      color: "#222222",
+      color: "#000000",
+      type: "square",
     },
     backgroundOptions: {
-      color: "#5FD4F3",
+      color: "#ffffff",
     },
   };
 
