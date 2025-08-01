@@ -1,12 +1,12 @@
 import { database } from "~/database/context";
 import * as schema from "~/database/schema";
 import { auth } from "../../auth.js";
-import { PERMISSIONS } from "../../database/seed";
-import { createAuthContextFromSession } from "../lib/auth-utils";
-import { createPermissionChecker } from "../lib/permissions";
+import { PERMISSIONS } from "../../database/seed.js";
+import { createAuthContextFromSession } from "../lib/auth-utils.js";
+import { createPermissionChecker } from "../lib/permissions.js";
 
-import { Welcome } from "../welcome/welcome";
-import type { Route } from "./+types/home";
+import { Welcome } from "../welcome/welcome.js";
+import type { Route } from "./+types/home.js";
 
 // eslint-disable-next-line no-empty-pattern
 export function meta({}: Route.MetaArgs) {
