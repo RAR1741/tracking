@@ -39,23 +39,45 @@ app.use(express.json());
 if (process.env.NODE_ENV === "development") {
   app.post("/api/dev/signin-admin", async (req, res) => {
     try {
-      // Use better-auth's built-in signIn method
-      const { user } = await auth.api.signInEmail({
-        body: {
-          email: "admin@localhost.dev",
-          password: "admin123",
+      // Get the admin user credentials (same as in seed script)
+      const adminEmail = "admin@example.com";
+      const adminPassword = "admin123456";
+
+      // Use better-auth's built-in sign-in endpoint by making an internal request
+      const signInUrl = `${req.protocol}://${req.get("host")}/api/auth/sign-in/email`;
+
+      const signInResponse = await fetch(signInUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "User-Agent": req.get("User-Agent") || "better-auth-dev",
         },
+        body: JSON.stringify({
+          email: adminEmail,
+          password: adminPassword,
+        }),
       });
 
-      if (!user) {
-        throw new Error("Failed to sign in with better-auth");
+      if (!signInResponse.ok) {
+        const errorData = await signInResponse.text();
+        throw new Error(
+          `Sign-in failed: ${signInResponse.status} ${errorData}`
+        );
       }
 
-      // Assign admin role after successful signin
-      const seedModule = await import("../database/seed.js");
-      await seedModule.seedLocalAdmin();
+      const signInResult = await signInResponse.json();
 
-      res.json({ success: true, message: "Signed in as LOCAL_ADMIN" });
+      // Copy all Set-Cookie headers from the sign-in response to our response
+      const setCookieHeaders = signInResponse.headers.getSetCookie?.() || [];
+      setCookieHeaders.forEach((cookie) => {
+        res.append("Set-Cookie", cookie);
+      });
+
+      res.json({
+        success: true,
+        message: "Signed in as LOCAL_ADMIN",
+        user: signInResult.user || signInResult,
+      });
     } catch (error) {
       if (process.env.NODE_ENV === "development") {
         // eslint-disable-next-line no-console

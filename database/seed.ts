@@ -1,6 +1,6 @@
-import { deleteUser, signUp } from "../app/lib/auth-client";
+import { eq } from "drizzle-orm";
 import { database } from "./context";
-import { permission, role, rolePermission, userRole } from "./schema";
+import { permission, role, rolePermission, user } from "./schema";
 
 // Define permissions
 export const PERMISSIONS = {
@@ -153,55 +153,68 @@ export async function seedLocalAdmin() {
   }
 
   try {
+    // Admin credentials for development
+    const adminEmail = "admin@example.com";
+    const adminPassword = "admin123456";
+    const adminName = "Local Admin";
+
+    // Check if admin user already exists
     const db = database();
-
-    // Create the LOCAL_ADMIN user with a fixed ID for dev
-    const localAdminUser = {
-      name: "Local Admin",
-      email: "admin@local.dev",
-      password: "admin123",
-    };
-
-    // Delete the user if already exists to ensure idempotency in dev
-    try {
-      await deleteUser({
-        email: localAdminUser.email,
-      });
-    } catch (error) {
-      // Ignore deletion errors (user might not exist)
-    }
-
-    // // Insert user, ignore if already exists
-    const result = await signUp.email({
-      ...localAdminUser,
+    const existingUser = await db.query.user.findFirst({
+      where: (user, { eq }) => eq(user.email, adminEmail),
     });
 
-    if (result.error && !/already exists/.test(result.error.message)) {
-      throw new Error(
-        `Failed to create LOCAL_ADMIN user: ${result.error.message}`
-      );
+    if (existingUser) {
+      // User exists, just ensure they have admin role in the database
+      await db
+        .update(user)
+        .set({ role: "admin" })
+        .where(eq(user.id, existingUser.id));
+
+      return {
+        success: true,
+        message:
+          "LOCAL_ADMIN user already exists, ensured admin role is assigned",
+        user: {
+          id: existingUser.id,
+          email: existingUser.email,
+          name: existingUser.name,
+        },
+      };
     }
 
-    console.log(result);
+    // First create the user using better-auth's signup API
+    const { auth } = await import("../auth.js");
 
-    const userId = result.data?.user?.id;
-    if (!userId) {
-      throw new Error("Failed to retrieve LOCAL_ADMIN user ID after creation");
+    const signupResult = await auth.api.signUpEmail({
+      body: {
+        email: adminEmail,
+        password: adminPassword,
+        name: adminName,
+      },
+      headers: new Headers({
+        "Content-Type": "application/json",
+      }),
+    });
+
+    if (!signupResult || !signupResult.user) {
+      throw new Error("Failed to create admin user via signup");
     }
 
-    // // Assign ADMIN role to the user
+    // Update the user to have admin role
     await db
-      .insert(userRole)
-      .values({
-        userId: userId,
-        roleId: ROLES.ADMIN.id,
-      })
-      .onConflictDoNothing();
+      .update(user)
+      .set({ role: "admin" })
+      .where(eq(user.id, signupResult.user.id));
 
     return {
       success: true,
-      message: "LOCAL_ADMIN roles assigned successfully",
-      user: localAdminUser,
+      message: "LOCAL_ADMIN user created and admin role assigned successfully",
+      user: {
+        id: signupResult.user.id,
+        email: signupResult.user.email,
+        name: signupResult.user.name,
+      },
     };
   } catch (error) {
     return {

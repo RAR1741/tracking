@@ -20,12 +20,22 @@ async function main() {
 
       // Also seed LOCAL_ADMIN in development
       if (process.env.NODE_ENV === "development") {
+        console.log("🔄 Creating LOCAL_ADMIN user...");
+
         const adminResult = await seedLocalAdmin();
+
         if (adminResult.success) {
           console.log("✅", adminResult.message);
+          if (adminResult.user) {
+            console.log("👤 Admin user:", adminResult.user);
+          }
         } else {
-          console.error("⚠️", adminResult.error);
+          console.error("❌ LOCAL_ADMIN creation failed:", adminResult.error);
         }
+      } else {
+        console.log(
+          "ℹ️ Skipping LOCAL_ADMIN creation (not in development mode)"
+        );
       }
     });
   } catch (error) {
