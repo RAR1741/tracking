@@ -5,8 +5,8 @@ import { PERMISSIONS } from "../../database/seed.js";
 import { createAuthContextFromSession } from "../lib/auth-utils.js";
 import { createPermissionChecker } from "../lib/permissions.js";
 
-import { Welcome } from "../welcome/welcome.js";
-import type { Route } from "./+types/home.js";
+import { Welcome } from "../welcome/welcome";
+import type { Route } from "./+types/_index";
 
 // eslint-disable-next-line no-empty-pattern
 export function meta({}: Route.MetaArgs) {
