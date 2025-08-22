@@ -39,7 +39,7 @@
   "postCreateCommand": "npm install",
 
   // Use 'postStartCommand' to run commands after the container starts.
-  "postStartCommand": "npm run dev",
+  "postStartCommand": "npm install;npm run dev",
 
   // Configure tool-specific properties.
   "customizations": {
