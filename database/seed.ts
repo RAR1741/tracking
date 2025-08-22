@@ -1,5 +1,5 @@
 import { database } from "./context";
-import { permission, role, rolePermission } from "./schema";
+import { permission, role, rolePermission, user, userRole } from "./schema";
 
 // Define permissions
 export const PERMISSIONS = {
@@ -134,6 +134,50 @@ export async function seedRolesAndPermissions() {
     return {
       success: true,
       message: "Roles and permissions seeded successfully",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
+export async function seedLocalAdmin() {
+  if (process.env.NODE_ENV !== "development") {
+    return {
+      success: false,
+      error: "LOCAL_ADMIN can only be created in development mode",
+    };
+  }
+
+  try {
+    const db = database();
+
+    // Create the LOCAL_ADMIN user with a fixed ID for dev
+    const localAdminUser = {
+      id: "local-admin-dev",
+      name: "Local Admin",
+      email: "admin@local.dev",
+      emailVerified: true,
+    };
+
+    // Insert user, ignore if already exists
+    await db.insert(user).values(localAdminUser).onConflictDoNothing();
+
+    // Assign ADMIN role to the user
+    await db
+      .insert(userRole)
+      .values({
+        userId: localAdminUser.id,
+        roleId: ROLES.ADMIN.id,
+      })
+      .onConflictDoNothing();
+
+    return {
+      success: true,
+      message: "LOCAL_ADMIN roles assigned successfully",
+      user: localAdminUser,
     };
   } catch (error) {
     return {

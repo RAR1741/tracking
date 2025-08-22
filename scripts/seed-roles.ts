@@ -2,7 +2,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { DatabaseContext } from "../database/context";
 import * as schema from "../database/schema";
-import { seedRolesAndPermissions } from "../database/seed";
+import { seedLocalAdmin, seedRolesAndPermissions } from "../database/seed";
 
 async function main() {
   const sql = postgres(process.env.DATABASE_URL!);
@@ -16,6 +16,16 @@ async function main() {
       } else {
         console.error("❌", result.error);
         process.exit(1);
+      }
+
+      // Also seed LOCAL_ADMIN in development
+      if (process.env.NODE_ENV === "development") {
+        const adminResult = await seedLocalAdmin();
+        if (adminResult.success) {
+          console.log("✅", adminResult.message);
+        } else {
+          console.error("⚠️", adminResult.error);
+        }
       }
     });
   } catch (error) {

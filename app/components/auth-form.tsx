@@ -2,6 +2,33 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { signIn, signUp } from "~/lib/auth-client";
 
+interface DevSignInButtonProps {
+  onSignIn: () => Promise<void>;
+  isLoading: boolean;
+}
+
+function DevSignInButton({ onSignIn, isLoading }: DevSignInButtonProps) {
+  if (process.env.NODE_ENV !== "development") {
+    return null;
+  }
+
+  return (
+    <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+      <button
+        type="button"
+        onClick={onSignIn}
+        disabled={isLoading}
+        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      >
+        {isLoading ? "Signing in..." : "🔧 Quick Admin Login (Dev Only)"}
+      </button>
+      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">
+        Signs in as LOCAL_ADMIN with full permissions
+      </p>
+    </div>
+  );
+}
+
 export function AuthForm({
   mode,
   error: serverError,
@@ -12,6 +39,7 @@ export function AuthForm({
   const navigate = useNavigate();
   const [error, setError] = useState(serverError);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDevSignin, setIsDevSignin] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -66,6 +94,35 @@ export function AuthForm({
       setError("Authentication failed. Please try again.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDevSignIn = async () => {
+    setIsDevSignin(true);
+    setError(undefined);
+
+    try {
+      const response = await fetch("/api/dev/signin-admin", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        // Redirect to home page after successful auth
+        navigate("/");
+      } else {
+        setError(result.error || "Development sign-in failed");
+      }
+    } catch (err) {
+      if (process.env.NODE_ENV === "development") {
+        // eslint-disable-next-line no-console
+        console.error("Dev sign-in error:", err);
+      }
+      setError("Development sign-in failed. Please try again.");
+    } finally {
+      setIsDevSignin(false);
     }
   };
 
@@ -146,6 +203,8 @@ export function AuthForm({
               : "Sign Up"}
         </button>
       </form>
+
+      <DevSignInButton onSignIn={handleDevSignIn} isLoading={isDevSignin} />
 
       <div className="mt-4 text-center">
         <span className="text-sm text-gray-600 dark:text-gray-400">
