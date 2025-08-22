@@ -1,5 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { admin } from "better-auth/plugins";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./database/schema.js";
@@ -48,6 +49,7 @@ export const auth = betterAuth({
       enabled: process.env.NODE_ENV === "development",
     },
   },
+  plugins: [admin()],
 });
 
 export type Session = typeof auth.$Infer.Session;

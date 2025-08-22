@@ -1,5 +1,6 @@
+import { deleteUser, signUp } from "../app/lib/auth-client";
 import { database } from "./context";
-import { permission, role, rolePermission, user, userRole } from "./schema";
+import { permission, role, rolePermission, userRole } from "./schema";
 
 // Define permissions
 export const PERMISSIONS = {
@@ -156,20 +157,43 @@ export async function seedLocalAdmin() {
 
     // Create the LOCAL_ADMIN user with a fixed ID for dev
     const localAdminUser = {
-      id: "local-admin-dev",
       name: "Local Admin",
       email: "admin@local.dev",
-      emailVerified: true,
+      password: "admin123",
     };
 
-    // Insert user, ignore if already exists
-    await db.insert(user).values(localAdminUser).onConflictDoNothing();
+    // Delete the user if already exists to ensure idempotency in dev
+    try {
+      await deleteUser({
+        email: localAdminUser.email,
+      });
+    } catch (error) {
+      // Ignore deletion errors (user might not exist)
+    }
 
-    // Assign ADMIN role to the user
+    // // Insert user, ignore if already exists
+    const result = await signUp.email({
+      ...localAdminUser,
+    });
+
+    if (result.error && !/already exists/.test(result.error.message)) {
+      throw new Error(
+        `Failed to create LOCAL_ADMIN user: ${result.error.message}`
+      );
+    }
+
+    console.log(result);
+
+    const userId = result.data?.user?.id;
+    if (!userId) {
+      throw new Error("Failed to retrieve LOCAL_ADMIN user ID after creation");
+    }
+
+    // // Assign ADMIN role to the user
     await db
       .insert(userRole)
       .values({
-        userId: localAdminUser.id,
+        userId: userId,
         roleId: ROLES.ADMIN.id,
       })
       .onConflictDoNothing();

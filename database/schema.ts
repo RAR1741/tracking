@@ -83,40 +83,45 @@ export const userPermission = pgTable(
 // Better Auth tables
 export const user = pgTable("user", {
   id: text().primaryKey(),
-  name: text(),
+  name: text().notNull(),
   email: text().notNull().unique(),
   emailVerified: boolean().notNull().default(false),
   image: text(),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp().notNull().defaultNow(),
+  role: text(),
+  banned: boolean(),
+  banReason: text(),
+  banExpires: timestamp(),
 });
 
 export const session = pgTable("session", {
   id: text().primaryKey(),
+  expiresAt: timestamp().notNull(),
+  token: text().notNull().unique(),
+  createdAt: timestamp().notNull().defaultNow(),
+  updatedAt: timestamp().notNull().defaultNow(),
+  ipAddress: text(),
+  userAgent: text(),
   userId: text()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  token: text().notNull().unique(),
-  expiresAt: timestamp().notNull(),
-  ipAddress: text(),
-  userAgent: text(),
-  createdAt: timestamp().notNull().defaultNow(),
-  updatedAt: timestamp().notNull().defaultNow(),
+  impersonatedBy: text(),
 });
 
 export const account = pgTable("account", {
   id: text().primaryKey(),
+  accountId: text().notNull(),
+  providerId: text().notNull(),
   userId: text()
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  accountId: text().notNull(),
-  providerId: text().notNull(),
   accessToken: text(),
   refreshToken: text(),
+  idToken: text(),
   accessTokenExpiresAt: timestamp(),
   refreshTokenExpiresAt: timestamp(),
   scope: text(),
-  idToken: text(),
   password: text(),
   createdAt: timestamp().notNull().defaultNow(),
   updatedAt: timestamp().notNull().defaultNow(),

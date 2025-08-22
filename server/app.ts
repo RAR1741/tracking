@@ -39,32 +39,17 @@ app.use(express.json());
 if (process.env.NODE_ENV === "development") {
   app.post("/api/dev/signin-admin", async (req, res) => {
     try {
-      // Generate a session token
-      const crypto = await import("crypto");
-      const sessionToken = crypto.randomBytes(32).toString("hex");
-      const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
-
-      // Insert session directly into database
-      await db
-        .insert(schema.session)
-        .values({
-          id: crypto.randomUUID(),
-          userId: "local-admin-dev", // This should match the user ID from seed
-          token: sessionToken,
-          expiresAt,
-          ipAddress: req.ip || "127.0.0.1",
-          userAgent: req.headers["user-agent"] || "dev-client",
-        })
-        .onConflictDoNothing();
-
-      // Set the session cookie
-      res.cookie("better-auth.session_token", sessionToken, {
-        httpOnly: true,
-        secure: false, // dev mode
-        sameSite: "lax",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        path: "/",
+      // Use better-auth's built-in signIn method
+      const { user } = await auth.api.signInEmail({
+        body: {
+          email: "admin@localhost.dev",
+          password: "admin123",
+        },
       });
+
+      if (!user) {
+        throw new Error("Failed to sign in with better-auth");
+      }
 
       // Assign admin role after successful signin
       const seedModule = await import("../database/seed.js");
